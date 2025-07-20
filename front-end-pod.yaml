@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: portfolio-pod
+  namespace: front-end-app
+  labels:
+    app: portfolio
+    tier: frontend
+spec:
+  containers:
+    - name: portfolio-container
+      image: mohitraj18/restaurant-devops  # <-- use your custom image
+      ports:
+        - containerPort: 80
