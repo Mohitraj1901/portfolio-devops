@@ -1,13 +1,14 @@
-name: Build & Deploy Static Website
+name: Build and Push Docker Image
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  docker-build:
     runs-on: ubuntu-latest
-#ii
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -21,18 +22,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
+    - name: Build and Push Docker Image
       run: |
         docker build -t mohitraj18/myapp:latest .
         docker push mohitraj18/myapp:latest
-
-    - name: Set up Kubeconfig
-      run: |
-        echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > kubeconfig
-        export KUBECONFIG=kubeconfig
-
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f front-end-pod.yaml
-        kubectl apply -f front-end-service.yaml
-        kubectl apply -f front-end-deployment.yaml
